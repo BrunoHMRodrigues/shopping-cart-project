@@ -11,16 +11,23 @@ const loadingElement = document.createElement('div');
 loadingElement.classList.add('loading');
 loadingElement.innerHTML = 'carregando...';
 sectionProducts.appendChild(loadingElement);
+try {
+  const data = await fetchProductsList('computador');
 
-const data = await fetchProductsList('computador');
+  const getLoading = document.querySelector('.loading');
+  getLoading.remove();
 
-const getLoading = document.querySelector('.loading');
-getLoading.remove();
-
-data.forEach((element) => {
-  const product = createProductElement(element);
-  sectionProducts.appendChild(product);
-});
+  data.forEach((element) => {
+    const product = createProductElement(element);
+    sectionProducts.appendChild(product);
+  });
+} catch (error) {
+  const errorElement = document.createElement('div');
+  const msgError = 'Algum erro ocorreu, recarregue a página e tente novamente';
+  errorElement.classList.add('error');
+  errorElement.innerHTML = msgError;
+  sectionProducts.appendChild(errorElement);
+}
 
 // data.forEach((element) => {
 //   createProductElement(element);
