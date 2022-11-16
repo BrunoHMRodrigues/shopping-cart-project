@@ -7,7 +7,16 @@ document.querySelector('.cep-button').addEventListener('click', searchCep);
 
 const sectionProducts = document.querySelector('.products');
 
+const loadingElement = document.createElement('div');
+loadingElement.classList.add('loading');
+loadingElement.innerHTML = 'carregando...';
+sectionProducts.appendChild(loadingElement);
+
 const data = await fetchProductsList('computador');
+
+const getLoading = document.querySelector('.loading');
+getLoading.remove();
+
 data.forEach((element) => {
   const product = createProductElement(element);
   sectionProducts.appendChild(product);
