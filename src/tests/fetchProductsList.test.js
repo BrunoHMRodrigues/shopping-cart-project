@@ -8,22 +8,23 @@ describe('Teste a função fetchProductsList', () => {
     expect(typeof fetchProductsList).toBe('function');
   });
 
-  it('fetch é chamado ao executar fetchProductsList', () => {
-    fetchProductsList('computador');
+  it('fetch é chamado ao executar fetchProductsList', async () => {
+    await fetchProductsList('computador');
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('fetch é chamado com o endpoint correto ao executar fetchProductsList', () => {
+  it('fetch é chamado com o endpoint correto ao executar fetchProductsList', async () => {
+    await fetchProductsList('computador');
     const API = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
     expect(fetch).toHaveBeenCalledWith(API);
   });
 
-  it('Retorno da função fetchProductsList("computador") é igual a estrutura de dados do objeto computadorSearch', () => {
-    expect(fetchProductsList('computador')).toEqual(computadorSearch);
+  it('Retorno da função fetchProductsList("computador") é igual a estrutura de dados do objeto computadorSearch', async () => {
+    expect(await fetchProductsList('computador')).toEqual(computadorSearch);
   });
 
   it('Retorno da função fetchProductsList() retorna um erro com a mensagem "Termo de busca não informado"', () => {
     const msgErro = 'Termo de busca não informado';
-    expect( () => { fetchProductsList() }).toThrow(msgErro);
+    expect( async () => { await fetchProductsList() }).toThrow(msgErro);
   });
 });
