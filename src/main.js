@@ -47,7 +47,7 @@ function getSavedCart() {
           const value = Number(element.children[1].children[1].children[0].innerHTML);
           console.log(value);
           totalValue.innerHTML = Number(totalValue.innerHTML) + value;
-          console.log('Total: ' + totalValue.innerHTML);
+        //   console.log('Total: ' + totalValue.innerHTML);
         }
       });
     });
@@ -113,5 +113,19 @@ cartContainer.addEventListener('click', (event) => {
     cartContainer.innerHTML = '';
     totalValue.innerHTML = 0;
     getSavedCart();
+  }
+});
+
+const btnCEP = document.querySelector('.cep-button');
+const cepInput = document.querySelector('.cep-input');
+
+btnCEP.addEventListener('click', async () => {
+  const cepValue = cepInput.value;
+  const lengthCEP = 8;
+  if (cepValue.length === lengthCEP) {
+    // const CEP = document.querySelector('.cep-input');
+    const address = await searchCep(cepValue);
+    const spanAddress = document.querySelector('.cart__address');
+    spanAddress.innerHTML = address;
   }
 });
