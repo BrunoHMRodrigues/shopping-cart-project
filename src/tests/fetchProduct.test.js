@@ -26,6 +26,6 @@ describe('Teste a função fetchProduct', () => {
 
   it('Retorno da função fetchProduct() retorna um erro com a mensagem "ID não informado"', async () => {
     const msgError = 'ID não informado';
-    await expect(fetchProduct('MLB1405519561')).rejects.toThrowError(msgError);
+    await expect(fetchProduct()).rejects.toThrowError(msgError);
   });
 });

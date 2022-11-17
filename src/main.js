@@ -20,8 +20,37 @@ async function addToCart(idProduct) {
   const dataProduct = await fetchProduct(idProduct);
   //   console.log('id: ' + dataProduct.id);
   const productToCart = createCartProductElement(dataProduct);
+  //   console.log('product: ' + dataProduct.price);
+  //   const { price } = dataProduct.price;
+  //   console.log('price: ' + dataProduct.price);
   return productToCart;
 //   cart.appendChild(productToCart);
+}
+
+function getSavedCart() {
+  const savedCartProducts = getSavedCartIDs();
+  //   console.log('saved: ' + savedCartProducts);
+  Promise.all(savedCartProducts.map((idProduct) => addToCart(idProduct)))
+    .then((values) => {
+      // console.log('values: ' + values);
+      values.forEach((element) => {
+        const lengthInitial = cart.children.length;
+        // console.log('lengthinitial: ' + lengthInitial);
+        cart.appendChild(element);
+        const lengthAfter = cart.children.length;
+        // console.log('lengthinitialNEW: ' + lengthInitial);
+        // console.log('lengthafter: ' + lengthAfter);
+        if (lengthAfter > lengthInitial) {
+        //   console.log('entrou');
+          const totalValue = document.querySelector('.total-price');
+          // console.log(Number(element.children[1].children[1].children[0].innerHTML));
+          const value = Number(element.children[1].children[1].children[0].innerHTML);
+          console.log(value);
+          totalValue.innerHTML = Number(totalValue.innerHTML) + value;
+          console.log('Total: ' + totalValue.innerHTML);
+        }
+      });
+    });
 }
 
 try {
@@ -34,12 +63,7 @@ try {
     const product = createProductElement(element);
     sectionProducts.appendChild(product);
   });
-  const savedCartProducts = getSavedCartIDs();
-  //   console.log('saved: ' + savedCartProducts);
-  Promise.all(savedCartProducts.map((idProduct) => addToCart(idProduct)))
-    .then((values) => {
-      values.forEach((element) => cart.appendChild(element));
-    });
+  getSavedCart();
 
 //   savedCartProducts.forEach(async (idProduct) => {
 //     await addToCart(idProduct);
@@ -53,17 +77,41 @@ try {
 }
 
 // const buttonsAddCart = document.querySelectorAll('.product__add');
+const totalValue = document.querySelector('.total-price');
+const cartContainer = document.querySelector('.cart__products');
 
 sectionProducts.addEventListener('click', async (event) => {
   if (event.target.className === 'product__add') {
     const targetElement = event.target;
     const idElement = targetElement.parentNode.firstChild.innerText;
     saveCartID(idElement);
-    // const dataProduct = await fetchProduct(idElement);
-    // console.log(dataProduct);
-    // console.log('idelement: ' + idElement);
-    const getProductData = await addToCart(idElement);
-    // console.log('getProductData: ' + getProductData);
-    cart.appendChild(getProductData);
+    cartContainer.innerHTML = '';
+    totalValue.innerHTML = 0;
+    getSavedCart();
+    // // const dataProduct = await fetchProduct(idElement);
+    // // console.log(dataProduct);
+    // // console.log('idelement: ' + idElement);
+    // const getProductData = await addToCart(idElement);
+    // // console.log('getProductData: ' + getProductData[0]);
+    // // totalValue.innerHTML = Number(totalValue.innerHTML) + 10;
+    // const lengthInitial = cart.children.length;
+    // cart.appendChild(getProductData);
+    // const lengthAfter = cart.children.length;
+    // if (lengthAfter > lengthInitial) {
+    //   // console.log(Number(getProductData.children[1].children[1].children[0].innerHTML));
+    //   const value = Number(getProductData.children[1].children[1].children[0].innerHTML);
+    //   // console.log('actual: ' + value);
+    //   totalValue.innerHTML = Number(totalValue.innerHTML) + value;
+    // }
+  }
+});
+
+cartContainer.addEventListener('click', (event) => {
+  // console.log(event.target);
+  if (event.target.className === 'material-icons cart__product__remove') {
+    // console.log('entrou2');
+    cartContainer.innerHTML = '';
+    totalValue.innerHTML = 0;
+    getSavedCart();
   }
 });
